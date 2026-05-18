@@ -1,0 +1,8 @@
+# Streamlit secrets — never commit the real key
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
