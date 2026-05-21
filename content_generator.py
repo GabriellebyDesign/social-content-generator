@@ -91,6 +91,12 @@ HASHTAGS:
 
 DESIGN BRIEF:
 [Describe exactly what the graphic or image should look like — colors, imagery, text overlay suggestions — so a designer or Canva user can create it instantly]
+
+IMAGE PROMPT:
+[A detailed, ready-to-use prompt for an AI image generator like Midjourney, DALL-E, or Leonardo AI. Include style, lighting, mood, colors, subject, and composition. Format it so it can be pasted directly into an image generator.]
+
+VIDEO PROMPT:
+[A short video script for a 15-30 second Reel, TikTok, or LinkedIn video. Include: HOOK (first 3 seconds to stop the scroll), SCRIPT (what to say on camera or as voiceover), VISUALS (what to show on screen), and CTA (closing call to action).]
 """
 
     with st.spinner("Creating your content..."):
@@ -101,7 +107,7 @@ DESIGN BRIEF:
         result = response.choices[0].message.content
 
     # ── Parse sections ────────────────────────────────────────────────────────
-    headline = caption = hashtags = design = ""
+    headline = caption = hashtags = design = image_prompt = video_prompt = ""
     current = ""
 
     for line in result.split("\n"):
@@ -111,6 +117,10 @@ DESIGN BRIEF:
             current = "caption"
         elif line.startswith("HASHTAGS:"):
             current = "hashtags"
+        elif line.startswith("IMAGE PROMPT:"):
+            current = "image_prompt"
+        elif line.startswith("VIDEO PROMPT:"):
+            current = "video_prompt"
         elif line.startswith("DESIGN BRIEF:"):
             current = "design"
         else:
@@ -122,6 +132,10 @@ DESIGN BRIEF:
                 hashtags += line + "\n"
             elif current == "design":
                 design += line + "\n"
+            elif current == "image_prompt":
+                image_prompt += line + "\n"
+            elif current == "video_prompt":
+                video_prompt += line + "\n"
 
     # ── Display ───────────────────────────────────────────────────────────────
     st.success("Your content is ready!")
@@ -139,6 +153,14 @@ DESIGN BRIEF:
     st.subheader("Design Brief")
     st.warning(design.strip())
 
+    st.subheader("🎨 AI Image Prompt")
+    st.info(image_prompt.strip())
+    st.caption("Copy and paste this directly into Midjourney, DALL-E, or Leonardo AI.")
+
+    st.subheader("🎬 Video Script Prompt")
+    st.write(video_prompt.strip())
+    st.caption("Use this for Instagram Reels, TikTok, or LinkedIn video.")
+
     st.divider()
 
     # ── Download ──────────────────────────────────────────────────────────────
@@ -147,7 +169,9 @@ DESIGN BRIEF:
         f"HEADLINE:\n{headline.strip()}\n\n"
         f"CAPTION:\n{caption.strip()}\n\n"
         f"HASHTAGS:\n{hashtags.strip()}\n\n"
-        f"DESIGN BRIEF:\n{design.strip()}"
+        f"DESIGN BRIEF:\n{design.strip()}\n\n"
+        f"AI IMAGE PROMPT:\n{image_prompt.strip()}\n\n"
+        f"VIDEO SCRIPT PROMPT:\n{video_prompt.strip()}"
     )
     st.download_button(
         "Download Full Post",
